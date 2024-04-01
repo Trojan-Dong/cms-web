@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        siteId: 4,
+        siteId: 1,
         cateList: [],   // 分类
         activeId: -1,   // 当前激活分类
         activeIndex: -1,   // 当前激活分类下级分类
