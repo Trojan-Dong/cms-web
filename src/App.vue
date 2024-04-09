@@ -8,11 +8,6 @@
                         欢迎访问
                         <a href="/">{{ siteInfo.name }}</a>&nbsp;&nbsp;&nbsp;&nbsp;
                     </div>
-                    <div class="u-topr f-fr">
-                        <a @clik="SetHome">设为首页</a>
-                        <span>|</span>
-                        <a @click="AddFavorite">加入收藏</a>
-                    </div>
                 </div>
             </div>
 
@@ -37,9 +32,9 @@
                             <div class="collapse navbar-collapse f-fl" id="example-navbar-collapse">
                                 <ul class="nav navbar-nav">
                                     <li v-for="(item, index) in cateTree">
-                                        <a @click="handleNavigate(item, -1)" target="_blank" v-if="item.childs === undefined || item.childs === null">{{ item.name }}</a>
+                                        <a @click="handleNavigate(item, -1)"  target="_blank" v-if="item.childs === undefined || item.childs === null">{{ item.name }}</a>
 
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" v-if="item.childs !== undefined && item.childs.length !== 0">
+                                        <a href="#" @mouseover="showDropdown(index)" @mouseout="hideDropdown(index)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" v-if="item.childs !== undefined && item.childs.length !== 0">
                                             {{ item.name }} <span class="caret"></span>
                                         </a>
                                         <ul class="dropdown-menu" v-if="item.childs !== undefined && item.childs.length !== 0" style="background-color: #fff;text-align: center">
@@ -50,35 +45,15 @@
                                             </li>
                                         </ul>
                                     </li>
-
-<!--                                    <li class="dropdown" v-else>-->
-<!--                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>-->
-<!--                                        <ul class="dropdown-menu">-->
-<!--                                            <li><a href="#">Action</a></li>-->
-<!--                                            <li><a href="#">Another action</a></li>-->
-<!--                                            <li><a href="#">Something else here</a></li>-->
-<!--                                            <li role="separator" class="divider"></li>-->
-<!--                                            <li><a href="#">Separated link</a></li>-->
-<!--                                        </ul>-->
+<!--                                    <li>-->
+<!--                                        <a @click="handleNavigateAbout" target="_blank">关于我们</a>-->
+<!--                                        <dl class="f-dn">-->
+<!--                                        </dl>-->
 <!--                                    </li>-->
-
-                                    <li>
-                                        <a @click="handleNavigateAbout" target="_blank">关于我们</a>
-                                        <dl class="f-dn">
-                                        </dl>
-                                    </li>
                                 </ul>
                             </div>
                         </div>
                     </nav>
-                    <!--                    <div class="m-search f-fr f-pr">-->
-                    <!--                        <i class="m-search1"></i>-->
-                    <!--                        <form class="u-search f-clearfix" method="GET" action="/index.php?c=search">-->
-                    <!--                            <input type="hidden" name="c" value="search">-->
-                    <!--                            <input type="text" class="text f-pa f-dn" placeholder="请输入搜索关键字" name="keywords">-->
-                    <!--                            <input type="submit" class="submit f-pa f-dn" value="">-->
-                    <!--                        </form>-->
-                    <!--                    </div>-->
                 </div>
             </div>
         </div>
@@ -95,32 +70,12 @@
                     <p>
 <!--                        <a href="" target="_blank">法律声明</a><a href="/sitemap/" target="_blank"> | 网站地图 </a>-->
                         <a href="/about" target="_blank">联系我们</a>
-                        <a href="/cmsAdmin" target="_blank">| 管理后台</a>
+<!--                        <a href="/cmsAdmin" target="_blank">| 管理后台</a>-->
                     </p>
                     <p>版权所有：{{ siteInfo.name }}&nbsp;&nbsp;&nbsp; 地址：{{ siteInfo.address }} &nbsp; &nbsp; &nbsp;
                         电话：{{ siteInfo.phone }}</p>
                     <p><a href="https://beian.miit.gov.cn/" target="_blank">{{ siteInfo.beian }}</a></p>
                 </div>
-<!--                <div class="m-link f-fr">-->
-<!--                    <div class="u-link">-->
-<!--                        <div class="u-links f-fl">-->
-<!--                            <dl>-->
-<!--&lt;!&ndash;                                <dt>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    -友情链接- &ndash;&gt;-->
-<!--&lt;!&ndash;                                </dt>&ndash;&gt;-->
-<!--                                <dd>-->
-<!--                                    <ul>-->
-<!--                                        <li><a href="" target="_blank">233</a></li>-->
-<!--                                        <li><a href="" target="_blank">233</a></li>-->
-<!--                                        <li><a href="" target="_blank">2333</a></li>-->
-<!--                                        <li><a href="" target="_blank">2333</a></li>-->
-<!--                                        <li><a href="" target="_blank">2333</a></li>-->
-<!--                                    </ul>-->
-<!--                                </dd>-->
-<!--                            </dl>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
             </div>
         </div>
         <!--底部 end-->
@@ -169,36 +124,12 @@ export default {
                 path: `/about`,
             })
         },
-        //加入收藏夹，兼容多种浏览器
-        AddFavorite() {
-            let sUrl = window.location
-            let sTitle = document.title
-            try{window.external.addFavorite(sUrl,sTitle );}
-            catch (e)
-            {
-                try{window.sidebar.addPanel(sTitle, sUrl, "");}
-                catch (e){alert("加入收藏失败，请使用Ctrl+D进行添加");}
-            }
-        },
-        SetHome(){
-            console.log(window)
-            try{
-                this.style.behavior = 'window.location(#default#homepage)';
-                this.setHomePage(window.location);
-            }catch(e){
-                if(window.netscape){
-                    try{
-                        netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
-                    }catch(e){
-                        alert('抱歉，此操作被浏览器拒绝！\n\n请在浏览器地址栏输入“about:config”并回车\n\n然后将[signed.applets.codebase_principal_support]的值设置为true，双击即可。');
-                    }
-                    var prefs = Components.classes['@mozilla.org/preferences-service;1'].getService(Components.interfaces.nsIPrefBranch);
-                    prefs.setCharPref('browser.startup.homepage',window.location);
-                }else{
-                    alert('抱歉，您所使用的浏览器无法完成此操作。\n\n您需要手动将【' + window.location + '】设置为首页。');
-                }
-            }
-        }
+      showDropdown(index) {
+        this.activeIndex = index;
+      },
+      hideDropdown() {
+        this.activeIndex = -1;
+      },
     }
 }
 </script>
@@ -214,5 +145,13 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
+}
+
+.dropdown:hover > .dropdown-menu {
+  display: block;
+}
+
+.dropdown > .dropdown-toggle:active {
+  pointer-events: none;
 }
 </style>

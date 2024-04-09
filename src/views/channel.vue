@@ -31,16 +31,18 @@
                                 <span class="u-tit f-fl" v-else>{{ childList[activeIndex].name }}<em></em></span>
                             </div>
                             <div class="m-cglist m-liststyle1 f-md-mb15">
-                                <ul>
-                                    <li v-for="(item, index) in cateArticleList" :key="index" @click="handeleNavigate(item)">
-                                        <span>{{ formDate(item.createTime) }}</span>
-                                        <a :title="item.name" target="_blank">{{ item.title }}</a>
-                                    </li>
+                                <ul v-if="cateInfo.name!='关于我们'">
+                                  <li v-for="(item, index) in cateArticleList" :key="index" @click="handeleNavigate(item)">
+                                    <span>{{ formDate(item.createTime) }}</span>
+                                    <a :title="item.name" target="_blank">{{ item.title }}</a>
+                                  </li>
                                 </ul>
+                              <ul v-if="cateInfo.name=='关于我们'&&cateArticleList.length==1">
+                                <div v-html="cateArticleList[0].detail"></div>
+                              </ul>
                             </div>
                             <div class="text-right m-paginationyun7">
                                 <div id="pagination" class="f-fr">
-<!--                                    <pagination currentpage="1" pagesize="15" pagecount="1" total="3"></pagination>-->
                                 </div>
                             </div>
                         </section>
